@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Universe 🌌</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================
+       DESIGN TOKENS
+    ====================== */
+    :root {
+      --primary: #ff4d80;
+      --secondary: #6e8efb;
+      --glass-bg: rgba(255, 255, 255, 0.12);
+      --glass-border: rgba(255, 255, 255, 0.25);
+      --text-muted: #e0e0e0;
+      --radius-lg: 24px;
+      --transition: 0.8s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* =====================
+       BACKGROUND ELEMENTS
+    ====================== */
+    .moon {
+      position: absolute;
+      top: 3rem;
+      right: 3rem;
+      width: 80px;
+      height: 80px;
+      background: #fdfcdc;
+      border-radius: 50%;
+      box-shadow: 0 0 40px #fdfcdc, 0 0 80px #fffaaa;
+      opacity: 0.9;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+    }
+
+    .shooting-star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 4px rgba(255, 255, 255, 0.1),
+        0 0 0 8px rgba(255, 255, 255, 0.1),
+        0 0 20px rgba(255, 255, 255, 1);
+      animation: shoot 3s linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    @keyframes shoot {
+      0% { transform: rotate(315deg) translateX(0); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: rotate(315deg) translateX(-1000px); opacity: 0; }
+    }
+
+    /* =====================
+       SCREEN SYSTEM
+    ====================== */
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1.5rem;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.05) translateY(-20px);
+      filter: blur(8px);
+    }
+
+    /* =====================
+       GLASS CARD
+    ====================== */
+    .card {
+      width: min(420px, 90vw);
+      padding: 2.5rem 2rem;
+      border-radius: var(--radius-lg);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    h1, h2 {
+      font-family: 'Dancing Script', cursive;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px rgba(255,255,255,0.6);
+    }
+
+    h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); color: #ff9fc3; }
+    h2 { font-size: clamp(2rem, 5vw, 2.6rem); }
+
+    p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* =====================
+       INTERACTIVE ELEMENTS
+    ====================== */
+    .glowing-box {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      font-size: 2.5rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--secondary), #a777e3);
+      box-shadow: 0 0 50px rgba(110, 142, 251, 0.6);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(167,119,227,0.9); }
+      100% { transform: scale(1); }
+    }
+
+    .photo-frame {
+      height: 250px;
+      border-radius: 16px;
+      margin-bottom: 1.2rem;
+      background-size: cover;
+      background-position: center;
+      border: 4px solid rgba(255,255,255,0.5);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* =====================
+       RING
+    ====================== */
+    .ring-container {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .ring-box {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle, #fff0f5, #ffb6c1);
+      box-shadow: 0 0 60px rgba(255,182,193,0.6);
+      animation: spin 12s linear infinite;
+    }
+
+    .diamond {
+      font-size: 3.5rem;
+      filter: drop-shadow(0 0 20px white);
+      animation: pop 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pop { to { transform: scale(1.15); } }
+
+    /* =====================
+       BUTTONS
+    ====================== */
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 0.9rem 2rem;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-yes {
+      background: linear-gradient(90deg, var(--primary), #ff8fa3);
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(255,77,128,0.5);
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.08);
+      box-shadow: 0 15px 35px rgba(255,77,128,0.7);
+    }
+
+    .btn-no {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    /* =====================
+       FIREWORKS
+    ====================== */
+    .firework {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      to {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bgm" src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" loop></audio>
+
+<div class="moon"></div>
+<div id="stars"></div>
+
+<div class="shooting-star" style="top:20%;left:10%;animation-delay:0s"></div>
+<div class="shooting-star" style="top:60%;left:80%;animation-delay:2.5s"></div>
+<div class="shooting-star" style="top:40%;left:40%;animation-delay:5s"></div>
+
+<!-- SCREEN 1 -->
+<section class="screen" id="s1">
+  <div>
+    <div class="glowing-box" role="button" aria-label="Open gift">🎁</div>
+    <p style="margin-top:1.5rem;opacity:0.8">A piece of the galaxy for you…</p>
+  </div>
+</section>
+
+<!-- SCREEN 2 -->
+<section class="screen hidden" id="s2">
+  <div class="card">
+    <h2>My Starlight ✨</h2>
+    <p>In a universe of infinite chaos, you are my only constant.</p>
+    <p>When I look at the night sky, I don’t see stars — I see you.</p>
+    <button class="btn-yes" data-next="3">Continue 🚀</button>
+  </div>
+</section>
+
+<!-- SCREEN 3 -->
+<section class="screen hidden" id="s3">
+  <div class="card">
+    <div class="photo-frame" style="background-image:url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop')"></div>
+    <p>Do you remember this moment?</p>
+    <p>One of a million memories I want forever.</p>
+    <button class="btn-yes" data-next="4">One last thing…</button>
+  </div>
+</section>
+
+<!-- SCREEN 4 -->
+<section class="screen hidden" id="s4">
+  <div class="card" style="border-color:#ff9fc3">
+    <div class="ring-container">
+      <div class="ring-box"><div class="diamond">💍</div></div>
+    </div>
+    <h1>Will You Be Mine?</h1>
+    <p>Under this moon and all these stars,<br>I want you to be my universe.</p>
+    <div class="btn-group">
+      <button class="btn-yes" id="yesBtn">YES 💖</button>
+      <button class="btn-no" id="noBtn">No</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 5 -->
+<section class="screen hidden" id="s5">
+  <div>
+    <h1>I Love You 🌙</h1>
+    <p style="font-size:1.4rem">The stars are jealous of us.</p>
+  </div>
+</section>
+
+<script>
+  /* =====================
+     STARS
+  ====================== */
+  const starContainer = document.getElementById('stars');
+  const STAR_COUNT = 150;
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 3;
+    star.style.cssText = `
+      width:${size}px;
+      height:${size}px;
+      left:${Math.random() * 100}vw;
+      top:${Math.random() * 100}vh;
+      opacity:${Math.random()};
+      animation-duration:${Math.random() * 2 + 1}s;
+    `;
+    starContainer.appendChild(star);
+  }
+
+  /* =====================
+     SCREEN NAVIGATION
+  ====================== */
+  const screens = document.querySelectorAll('.screen');
+  const audio = document.getElementById('bgm');
+
+  function showScreen(id) {
+    screens.forEach(s => s.classList.add('hidden'));
+    document.getElementById(`s${id}`).classList.remove('hidden');
+  }
+
+  document.querySelector('.glowing-box').addEventListener('click', () => {
+    showScreen(2);
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+  });
+
+  document.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', e => showScreen(e.target.dataset.next));
+  });
+
+  /* =====================
+     NO BUTTON DODGE
+  ====================== */
+  const noBtn = document.getElementById('noBtn');
+  noBtn.addEventListener('mouseenter', () => {
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+
+  /* =====================
+     YES + FIREWORKS
+  ====================== */
+  document.getElementById('yesBtn').addEventListener('click', () => {
+    showScreen(5);
+    launchFireworks();
+  });
+
+  function launchFireworks() {
+    const colors = ['#ff4d80', '#ff9fc3', '#ffffff', '#ffd700', '#6e8efb'];
+
+    setInterval(() => {
+      const x = Math.random() * innerWidth;
+      const y = Math.random() * innerHeight;
+
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'firework';
+        p.style.left = `${x}px`;
+        p.style.top = `${y}px`;
+        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 100 + 50;
+        p.style.setProperty('--x', `${Math.cos(angle) * velocity}px`);
+        p.style.setProperty('--y', `${Math.sin(angle) * velocity}px`);
+
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
+      }
+    }, 450);
+  }
+</script>
+</body>
+</html>
